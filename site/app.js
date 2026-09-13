@@ -17,6 +17,7 @@ const elements = {
   voteForm: $("#vote-form"), voteMessage: $("#vote-message"), ownCard: $("#own-vote-card"),
   ownDeleteForm: $("#own-delete-form"), ownDeleteMessage: $("#own-delete-message"),
   adminConsole: $("#admin-console"), adminForm: $("#admin-delete-form"), adminVoteId: $("#admin-vote-id"), adminMessage: $("#admin-message"), template: $("#participant-template"),
+  accountCopyButton: $("#account-copy-button"), accountCopyMessage: $("#account-copy-message"),
   tabs: [...document.querySelectorAll(".tab")], panels: [...document.querySelectorAll(".tab-panel")], tabShortcut: $(".tab-shortcut"),
 };
 
@@ -60,6 +61,32 @@ function setMessage(target, text = "", type = "") {
 function setButtonBusy(button, busy, idleText) {
   button.disabled = busy;
   button.textContent = busy ? "처리 중…" : idleText;
+}
+
+async function copyAccountNumber() {
+  const button = elements.accountCopyButton;
+  const value = button?.dataset.copyValue;
+  if (!button || !value) return;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const input = document.createElement("textarea");
+      input.value = value;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.append(input);
+      input.select();
+      const copied = document.execCommand("copy");
+      input.remove();
+      if (!copied) throw new Error("copy failed");
+    }
+    elements.accountCopyMessage.textContent = "계좌번호를 복사했습니다.";
+    button.textContent = "복사됨";
+    window.setTimeout(() => { button.textContent = "복사"; }, 1600);
+  } catch {
+    elements.accountCopyMessage.textContent = "복사하지 못했습니다. 계좌번호를 직접 선택해 복사해 주세요.";
+  }
 }
 
 function formatUpdatedAt(value) {
@@ -221,6 +248,8 @@ elements.adminForm.addEventListener("submit", async (event) => {
     setButtonBusy(button, false, "관리자 삭제");
   }
 });
+
+elements.accountCopyButton?.addEventListener("click", copyAccountNumber);
 
 async function init() {
   setupTabs();
