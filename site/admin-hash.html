@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <title>관리자 비밀번호 해시 생성기</title>
+    <link rel="stylesheet" href="./admin-hash.css" />
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">LOCAL-ONLY TOOL</p>
+      <h1>관리자 비밀번호 해시 생성기</h1>
+      <p class="intro">입력한 비밀번호는 이 페이지에서만 bcrypt cost 12 해시로 변환됩니다. 서버 전송이나 저장은 하지 않습니다.</p>
+
+      <form id="hash-form" novalidate>
+        <label for="master-password">관리자 비밀번호</label>
+        <input id="master-password" type="password" minlength="4" maxlength="72" autocomplete="new-password" placeholder="4자 이상, 72바이트 이하" required />
+
+        <label for="master-password-confirm">관리자 비밀번호 확인</label>
+        <input id="master-password-confirm" type="password" minlength="4" maxlength="72" autocomplete="new-password" placeholder="같은 비밀번호를 다시 입력" required />
+
+        <button id="generate-button" type="submit">bcrypt 해시 만들기</button>
+        <p id="message" class="message" aria-live="polite"></p>
+      </form>
+
+      <section id="result-section" hidden aria-labelledby="result-title">
+        <h2 id="result-title">Supabase에 넣을 값</h2>
+        <p><code>VOTE_MASTER_PASSWORD_HASH</code>의 값으로 아래 전체를 복사하세요.</p>
+        <textarea id="hash-output" rows="3" readonly aria-label="생성된 bcrypt 해시"></textarea>
+        <button id="copy-button" class="outline" type="button">해시 복사하기</button>
+      </section>
+
+      <div class="notice">
+        <strong>주의</strong>
+        <ul>
+          <li>원문 비밀번호는 Supabase, GitHub, 채팅에 입력하거나 저장하지 마세요.</li>
+          <li>해시는 한 번 복사해 비밀값에 저장한 뒤, 이 페이지를 닫아도 됩니다.</li>
+          <li>이 파일은 로컬에서 열리며 외부 연결을 하지 않습니다.</li>
+        </ul>
+      </div>
+    </main>
+    <script src="./vendor/bcrypt.js"></script>
+    <script src="./admin-hash.js"></script>
+  </body>
+</html>

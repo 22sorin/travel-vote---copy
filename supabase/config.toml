@@ -1,0 +1,5 @@
+project_id = "replace-with-your-project-ref"
+
+[functions.travel-vote]
+verify_jwt = false
+

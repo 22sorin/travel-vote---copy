@@ -1,0 +1,5 @@
+.DS_Store
+supabase/.temp/
+supabase/.branches/
+site/config.local.js
+
